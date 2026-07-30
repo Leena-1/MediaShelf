@@ -1,0 +1,745 @@
+A **TRD (Technical Requirements Document)** describes **how the system will be built**. While the PRD focuses on business requirements and features, the TRD covers architecture, technologies, APIs, database design, security, deployment, testing, and implementation details.
+
+---
+
+# Technical Requirements Document (TRD)
+
+## MediaShelf – Personal Movie & Book Library Management System
+
+**Version:** 1.0
+**Project Type:** Full-Stack MERN Web Application
+**Architecture:** Client–Server (3-Tier)
+**Database:** MongoDB
+
+---
+
+# 1. Purpose
+
+The purpose of this document is to define the technical architecture, implementation strategy, database schema, API specifications, security measures, and development standards for the MediaShelf application.
+
+---
+
+# 2. System Architecture
+
+```text
++-------------------------+
+|      React Client       |
+| (React + Tailwind CSS)  |
++------------+------------+
+             |
+        REST API (HTTPS)
+             |
++------------+------------+
+|   Express.js API Server |
+| Authentication          |
+| Business Logic          |
+| Validation              |
++------------+------------+
+             |
+          Mongoose ODM
+             |
++------------+------------+
+|       MongoDB Atlas     |
++-------------------------+
+```
+
+Architecture Pattern:
+
+* Client-Server Architecture
+* REST API
+* MVC Pattern
+* Component-Based Frontend
+
+---
+
+# 3. Technology Stack
+
+## Frontend
+
+* React 19
+* Vite
+* Tailwind CSS
+* React Router DOM
+* Axios
+* React Hook Form
+* React Icons
+* Framer Motion
+* React Hot Toast
+* Recharts
+
+---
+
+## Backend
+
+* Node.js
+* Express.js
+* JWT
+* bcrypt
+* Multer (Poster Upload)
+
+---
+
+## Database
+
+MongoDB
+
+ODM
+
+Mongoose
+
+---
+
+## Development Tools
+
+* VS Code
+* Git
+* GitHub
+* Postman
+* MongoDB Compass
+* npm
+
+---
+
+# 4. Folder Structure
+
+```text
+MediaShelf/
+
+client/
+│
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── context/
+│   ├── hooks/
+│   ├── layouts/
+│   ├── pages/
+│   ├── routes/
+│   ├── services/
+│   ├── utils/
+│   ├── styles/
+│   └── App.jsx
+│
+server/
+│
+├── config/
+├── controllers/
+├── middleware/
+├── models/
+├── routes/
+├── validators/
+├── services/
+├── utils/
+├── uploads/
+└── server.js
+```
+
+---
+
+# 5. Database Schema
+
+## Users Collection
+
+| Field     | Type     | Required |
+| --------- | -------- | -------- |
+| _id       | ObjectId | Yes      |
+| name      | String   | Yes      |
+| email     | String   | Yes      |
+| password  | String   | Yes      |
+| avatar    | String   | No       |
+| createdAt | Date     | Yes      |
+
+---
+
+## LibraryItems Collection
+
+| Field            | Type       |
+| ---------------- | ---------- |
+| _id              | ObjectId   |
+| type             | Movie/Book |
+| title            | String     |
+| genre            | String     |
+| authorOrDirector | String     |
+| description      | String     |
+| poster           | String     |
+| rating           | Number     |
+| releaseYear      | Number     |
+| status           | String     |
+| favorite         | Boolean    |
+| tags             | Array      |
+| createdBy        | ObjectId   |
+| createdAt        | Date       |
+| updatedAt        | Date       |
+
+---
+
+# 6. Authentication Flow
+
+```text
+Register
+
+↓
+
+Hash Password
+
+↓
+
+Store User
+
+↓
+
+Login
+
+↓
+
+Verify Password
+
+↓
+
+Generate JWT
+
+↓
+
+Send Token
+
+↓
+
+Protected Routes
+
+↓
+
+Authenticated User
+```
+
+---
+
+# 7. Frontend Modules
+
+## Authentication Module
+
+* Login
+* Register
+* Logout
+
+---
+
+## Dashboard Module
+
+Displays
+
+* Statistics
+* Charts
+* Recent Movies
+* Recent Books
+
+---
+
+## Library Module
+
+Contains
+
+Movies Section
+
+Books Section
+
+Both sections are completely independent.
+
+---
+
+## Favorites Module
+
+Contains
+
+Favorite Movies
+
+Favorite Books
+
+---
+
+## Add Item Module
+
+Add
+
+Movie
+
+Book
+
+---
+
+## Details Module
+
+Shows
+
+Poster
+
+Description
+
+Rating
+
+Favorite
+
+Edit
+
+Delete
+
+---
+
+# 8. Backend Modules
+
+Authentication Controller
+
+Library Controller
+
+Favorites Controller
+
+Dashboard Controller
+
+Search Controller
+
+Upload Controller
+
+Analytics Controller
+
+---
+
+# 9. REST APIs
+
+## Authentication
+
+POST /api/auth/register
+
+POST /api/auth/login
+
+GET /api/auth/profile
+
+POST /api/auth/logout
+
+---
+
+## Library
+
+GET /api/items
+
+GET /api/items/:id
+
+POST /api/items
+
+PUT /api/items/:id
+
+DELETE /api/items/:id
+
+---
+
+## Favorites
+
+PATCH /api/items/:id/favorite
+
+GET /api/favorites
+
+---
+
+## Dashboard
+
+GET /api/dashboard
+
+---
+
+## Analytics
+
+GET /api/analytics
+
+---
+
+## Upload
+
+POST /api/upload
+
+---
+
+# 10. API Response Format
+
+Success
+
+```json
+{
+  "success": true,
+  "message": "Movie added successfully",
+  "data": {}
+}
+```
+
+Failure
+
+```json
+{
+  "success": false,
+  "message": "Validation failed",
+  "errors": []
+}
+```
+
+---
+
+# 11. Business Logic
+
+### Add Movie
+
+Validate Input
+
+↓
+
+Save to MongoDB
+
+↓
+
+Return Success
+
+↓
+
+Refresh Dashboard
+
+---
+
+### Favorite
+
+User clicks Heart
+
+↓
+
+Update MongoDB
+
+↓
+
+Update Dashboard
+
+↓
+
+Update Favorites Page
+
+↓
+
+Update Navbar Badge
+
+No Refresh Required
+
+---
+
+### Search
+
+User types
+
+↓
+
+Backend receives query
+
+↓
+
+MongoDB Regex Search
+
+↓
+
+Separate
+
+Movies
+
+Books
+
+↓
+
+Return Results
+
+---
+
+# 12. Search Algorithm
+
+Fields
+
+* Title
+* Genre
+* Description
+* Author
+* Tags
+
+MongoDB
+
+```javascript
+{
+ title: {
+   $regex: keyword,
+   $options: "i"
+ }
+}
+```
+
+---
+
+# 13. Filtering
+
+Support
+
+Movie
+
+Book
+
+Genre
+
+Rating
+
+Status
+
+Release Year
+
+Favorite
+
+---
+
+# 14. Sorting
+
+Movies
+
+Newest
+
+Oldest
+
+Rating
+
+Alphabetical
+
+Books
+
+Newest
+
+Oldest
+
+Rating
+
+Alphabetical
+
+Sorting should be independent.
+
+---
+
+# 15. Pagination
+
+Movies
+
+Independent Pagination
+
+Books
+
+Independent Pagination
+
+Changing Movie page must never change Book page.
+
+---
+
+# 16. Theme Management
+
+Use React Context.
+
+Store theme
+
+```text
+light
+
+dark
+```
+
+Persist using Local Storage.
+
+---
+
+# 17. State Management
+
+Use React Context API for
+
+* Authentication
+* Theme
+* Favorites
+
+Use local component state where appropriate.
+
+---
+
+# 18. Security
+
+* JWT Authentication
+* Password Hashing (bcrypt)
+* Protected Routes
+* Input Validation
+* Server-side Validation
+* MongoDB Injection Protection
+* CORS Configuration
+* Environment Variables
+* Secure Password Storage
+
+---
+
+# 19. Validation Rules
+
+Title
+
+Required
+
+Maximum 100 characters
+
+---
+
+Genre
+
+Required
+
+---
+
+Rating
+
+1–5
+
+---
+
+Release Year
+
+1900–Current Year
+
+---
+
+Poster
+
+Image only
+
+---
+
+Email
+
+Valid Email
+
+---
+
+Password
+
+Minimum 8 characters
+
+---
+
+# 20. Performance
+
+* Lazy Loading
+* Code Splitting
+* React.memo
+* useMemo
+* useCallback
+* Optimized MongoDB Queries
+* Indexed Search Fields
+* Server-side Pagination
+
+---
+
+# 21. Responsive Design
+
+Desktop
+
+4 Cards per Row
+
+Tablet
+
+2 Cards per Row
+
+Mobile
+
+1 Card per Row
+
+---
+
+# 22. Error Handling
+
+Frontend
+
+* Toast Notifications
+* Validation Messages
+* Error Pages
+
+Backend
+
+* Centralized Error Middleware
+* API Error Responses
+* Logging
+
+---
+
+# 23. Testing Strategy
+
+### Frontend
+
+* Component Testing
+* Form Validation Testing
+* Navigation Testing
+
+### Backend
+
+* API Endpoint Testing
+* Authentication Testing
+* CRUD Testing
+* Validation Testing
+
+### Integration
+
+* Login → Dashboard
+* Add Item → Database
+* Favorite → Dashboard Update
+* Search → Filtered Results
+
+---
+
+# 24. Deployment
+
+Frontend
+
+* Vercel
+
+Backend
+
+* Render or Railway
+
+Database
+
+* MongoDB Atlas
+
+Environment Variables
+
+```env
+PORT=5000
+MONGO_URI=<mongodb_connection_string>
+JWT_SECRET=<jwt_secret>
+CLIENT_URL=http://localhost:5173
+```
+
+---
+
+# 25. Non-Functional Requirements
+
+* Responsive on Desktop, Tablet, and Mobile
+* Page load under 2 seconds on a standard broadband connection
+* RESTful API design
+* Modular, reusable components
+* Accessible UI (WCAG-friendly)
+* Scalable folder structure
+* Maintainable codebase
+* Consistent API response format
+* Secure authentication and authorization
+* Production-ready deployment configuration
+
+---
+
+# 26. Future Enhancements
+
+* Cloudinary integration for poster storage
+* TMDB API integration for movie metadata
+* Google Books/Open Library API integration for book metadata
+* AI-based recommendations
+* Barcode/ISBN scanning
+* Progressive Web App (offline support)
+* Reading and watch progress tracking
+* Push notifications for reminders
+* Docker containerization and CI/CD pipeline
+
+This TRD provides the technical blueprint needed to implement the MediaShelf project in a structured, maintainable, and production-ready manner.

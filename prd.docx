@@ -1,0 +1,721 @@
+# Product Requirements Document (PRD)
+
+## MediaShelf – Personal Movie & Book Library Management System
+
+**Version:** 1.0
+**Project Type:** Full-Stack MERN Web Application
+**Database:** MongoDB
+**Frontend:** React + Vite + Tailwind CSS
+**Backend:** Node.js + Express.js
+**Authentication:** JWT
+**Target Users:** Individual Users (Personal Library Management)
+
+---
+
+# 1. Project Overview
+
+MediaShelf is a modern personal library management platform that allows users to organize, track, search, and manage their movie and book collections in one place.
+
+Unlike traditional library systems, MediaShelf focuses on personal collection management with an intuitive UI, advanced search, favorites, analytics, and beautiful visualizations.
+
+This application is designed to resemble a premium SaaS product inspired by Netflix, Goodreads, and Notion.
+
+---
+
+# 2. Problem Statement
+
+Many users maintain separate lists for books and movies using notes, spreadsheets, or multiple applications.
+
+Existing applications often:
+
+* Mix books and movies together
+* Lack a clean UI
+* Have poor organization
+* Don't provide analytics
+* Lack favorites
+* Have weak search/filter capabilities
+
+MediaShelf solves these problems by providing one centralized personal library with intelligent organization and modern UX.
+
+---
+
+# 3. Objectives
+
+The system should allow users to:
+
+* Manage personal movie collection
+* Manage personal book collection
+* Search instantly
+* Filter intelligently
+* Favorite important items
+* Track statistics
+* Export collections
+* Import collections
+* Switch between Dark and Light themes
+
+---
+
+# 4. Target Users
+
+Only one role exists.
+
+## User
+
+The authenticated user can:
+
+* Register
+* Login
+* Logout
+* Add Movies
+* Add Books
+* Edit Items
+* Delete Items
+* Favorite Items
+* Search
+* Filter
+* Export
+* Import
+* View Dashboard
+
+There is **NO ADMIN**.
+
+---
+
+# 5. Tech Stack
+
+## Frontend
+
+* React 19
+* Vite
+* Tailwind CSS
+* React Router
+* Axios
+* Framer Motion
+* React Hook Form
+* React Icons
+* React Hot Toast
+* Recharts
+
+---
+
+## Backend
+
+* Node.js
+* Express.js
+
+---
+
+## Database
+
+MongoDB
+
+---
+
+## Authentication
+
+JWT
+
+Password Hashing using bcrypt
+
+---
+
+# 6. Functional Requirements
+
+## Authentication
+
+Users can
+
+* Register
+* Login
+* Logout
+
+JWT should protect all private routes.
+
+---
+
+## Dashboard
+
+Dashboard contains
+
+### Statistics Cards
+
+* Total Movies
+* Total Books
+* Average Rating
+* Favorites
+
+---
+
+### Charts
+
+Movies vs Books
+
+Genre Distribution
+
+Rating Distribution
+
+---
+
+### Recent Movies
+
+Display recently added movies only.
+
+---
+
+### Recent Books
+
+Display recently added books only.
+
+Movies and Books must NEVER be mixed.
+
+---
+
+## Library
+
+The Library page contains two completely separate sections.
+
+### Movies
+
+Movie cards only.
+
+### Books
+
+Book cards only.
+
+Movies must always appear above Books.
+
+---
+
+## Add Item
+
+The user selects
+
+Movie
+
+or
+
+Book
+
+Fields
+
+* Title
+* Genre
+* Author/Director
+* Poster
+* Description
+* Rating
+* Release Year
+* Tags
+* Status
+
+Validation
+
+* Required fields
+* Duplicate prevention
+* Rating 1–5
+* Valid year
+
+---
+
+## Edit Item
+
+Users can modify every field.
+
+---
+
+## Delete Item
+
+Soft confirmation before deleting.
+
+---
+
+## Search
+
+Search should work by
+
+* Title
+* Genre
+* Description
+* Author
+* Tags
+
+Results remain separated into
+
+Movies
+
+Books
+
+---
+
+## Filtering
+
+Support
+
+Movie
+
+Book
+
+Genre
+
+Rating
+
+Release Year
+
+Status
+
+Favorite
+
+Filtering should never merge books and movies.
+
+---
+
+## Sorting
+
+Sort independently.
+
+Movies
+
+* Newest
+* Oldest
+* Rating
+* Alphabetical
+
+Books
+
+* Newest
+* Oldest
+* Rating
+* Alphabetical
+
+---
+
+## Pagination
+
+Independent pagination.
+
+Movies pagination must not affect Books.
+
+Books pagination must not affect Movies.
+
+---
+
+# 7. Favorites
+
+Users can mark items as favorites.
+
+Clicking the heart
+
+↓
+
+Updates MongoDB
+
+↓
+
+Updates Dashboard
+
+↓
+
+Updates Navbar
+
+↓
+
+Updates Favorites page
+
+without refreshing.
+
+---
+
+## Favorites Page
+
+Create
+
+/favorites
+
+Structure
+
+Favorite Movies
+
+Movie Cards
+
+Favorite Books
+
+Book Cards
+
+Never mix.
+
+---
+
+# 8. Theme System
+
+Two themes.
+
+## Light Theme
+
+White
+
+Gray
+
+Blue Accent
+
+---
+
+## Dark Theme
+
+Dark Gray
+
+Glassmorphism
+
+Purple Accent
+
+---
+
+Theme should
+
+* Persist
+* Animate
+* Update all icons
+* Update colors
+
+---
+
+# 9. Book Icon Issue
+
+Fix the invisible icon.
+
+Requirements
+
+* Automatic contrast
+* Theme-aware icon
+* Never disappear
+
+---
+
+# 10. Dashboard Layout
+
+Statistics
+
+↓
+
+Charts
+
+↓
+
+Recent Movies
+
+↓
+
+Recent Books
+
+---
+
+# 11. Library Layout
+
+Movies Section
+
+Movie Cards
+
+Movie Cards
+
+Movie Cards
+
+---
+
+Books Section
+
+Book Cards
+
+Book Cards
+
+Book Cards
+
+---
+
+# 12. Favorites Layout
+
+Favorite Movies
+
+Movie Cards
+
+Movie Cards
+
+---
+
+Favorite Books
+
+Book Cards
+
+Book Cards
+
+---
+
+# 13. Navigation
+
+Navbar
+
+* Logo
+* Dashboard
+* Library
+* Favorites
+* Add Item
+* Search
+* Theme Toggle
+
+Sticky
+
+Responsive
+
+Mobile Menu
+
+---
+
+# 14. Item Card
+
+Each card displays
+
+Poster
+
+Title
+
+Genre
+
+Rating
+
+Status
+
+Favorite
+
+View
+
+Edit
+
+Delete
+
+Hover Animation
+
+---
+
+# 15. Empty States
+
+No Movies
+
+↓
+
+Movie Illustration
+
+Add Movie
+
+---
+
+No Books
+
+↓
+
+Book Illustration
+
+Add Book
+
+---
+
+No Favorites
+
+↓
+
+Heart Illustration
+
+Start Adding Favorites
+
+---
+
+# 16. Import / Export
+
+Export
+
+* JSON
+* CSV
+
+Import
+
+* JSON
+
+Validate before importing.
+
+---
+
+# 17. Analytics
+
+Dashboard Charts
+
+Movies vs Books
+
+Genre Breakdown
+
+Average Ratings
+
+Recently Added
+
+Favorite Count
+
+---
+
+# 18. Database Design
+
+## Users
+
+| Field     | Type     |
+| --------- | -------- |
+| _id       | ObjectId |
+| name      | String   |
+| email     | String   |
+| password  | String   |
+| avatar    | String   |
+| createdAt | Date     |
+
+---
+
+## LibraryItems
+
+| Field            | Type       |
+| ---------------- | ---------- |
+| _id              | ObjectId   |
+| type             | Movie/Book |
+| title            | String     |
+| genre            | String     |
+| authorOrDirector | String     |
+| description      | String     |
+| poster           | String     |
+| rating           | Number     |
+| releaseYear      | Number     |
+| status           | String     |
+| favorite         | Boolean    |
+| tags             | Array      |
+| createdBy        | ObjectId   |
+| createdAt        | Date       |
+| updatedAt        | Date       |
+
+---
+
+# 19. Non-Functional Requirements
+
+* Responsive
+* Fast loading
+* Mobile Friendly
+* Clean Architecture
+* Modular Components
+* REST APIs
+* Secure Authentication
+* Optimized MongoDB Queries
+* Error Handling
+* Reusable Components
+* Accessible UI
+
+---
+
+# 20. Project Structure
+
+```text
+MediaShelf/
+
+client/
+│
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── context/
+│   ├── hooks/
+│   ├── layouts/
+│   ├── pages/
+│   │     ├── Dashboard
+│   │     ├── Library
+│   │     ├── Favorites
+│   │     ├── AddItem
+│   │     ├── Login
+│   │     ├── Register
+│   │     └── ItemDetails
+│   ├── services/
+│   ├── utils/
+│   └── App.jsx
+│
+server/
+│
+├── config/
+├── controllers/
+├── middleware/
+├── models/
+├── routes/
+├── services/
+├── utils/
+├── validators/
+└── server.js
+```
+
+---
+
+# 21. User Flow
+
+```text
+User
+   │
+   ▼
+Register/Login
+   │
+   ▼
+Dashboard
+   │
+   ├──────────────► Add Movie
+   │
+   ├──────────────► Add Book
+   │
+   ▼
+Library
+   │
+   ├── Movies
+   │      ├── View
+   │      ├── Edit
+   │      ├── Delete
+   │      └── Favorite
+   │
+   ├── Books
+   │      ├── View
+   │      ├── Edit
+   │      ├── Delete
+   │      └── Favorite
+   │
+   ▼
+Favorites
+   │
+   ├── Favorite Movies
+   │
+   └── Favorite Books
+   │
+   ▼
+Dashboard Analytics
+```
+
+---
+
+# 22. Future Enhancements
+
+* Cloudinary image uploads
+* OCR for book covers
+* AI-based recommendations
+* Barcode/ISBN scanning
+* Movie API integration (TMDB)
+* Book API integration (Google Books/Open Library)
+* Reading progress tracking
+* Watch progress tracking
+* Offline mode (PWA)
+* Calendar view for recently added items
+* Personalized recommendations
+
+---
+
+## Success Criteria
+
+The project will be considered successful if:
+
+* Users can manage personal movie and book collections seamlessly.
+* Movies and books remain separated across all pages (Dashboard, Library, Favorites, Search, and Filters).
+* The UI is fully responsive with functional Light and Dark themes.
+* Favorites update instantly and are accessible through a dedicated page.
+* Search, filtering, sorting, and pagination are fast and intuitive.
+* The codebase is modular, maintainable, and suitable as a final-year engineering project and portfolio showcase.
