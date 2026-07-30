@@ -42,7 +42,9 @@ app.use("/api/ai", aiRoutes);
 app.get("/api/dashboard", protect, getStats);
 app.get("/api/analytics", protect, getStats);
 app.get("/api/favorites", protect, getFavorites);
-
+app.get("/", (req, res) => {
+  res.send("MediaShelf Backend is running 🚀");
+});
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date() });
 });
