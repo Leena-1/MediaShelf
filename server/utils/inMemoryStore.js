@@ -88,7 +88,7 @@ const generateToken = (id) => {
 };
 
 // --- User Operations ---
-const registerInMemoryUser = async (name, email, password) => {
+const registerInMemoryUser = async (name, email, password, isVerified = false, verificationToken = null, verificationExpire = null) => {
   const cleanEmail = email.trim().toLowerCase();
   const existing = memoryStore.users.find(u => u.email === cleanEmail);
   if (existing) {
@@ -105,6 +105,9 @@ const registerInMemoryUser = async (name, email, password) => {
     email: cleanEmail,
     password: hashedPassword,
     avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name.trim())}`,
+    isVerified,
+    emailVerificationToken: verificationToken,
+    emailVerificationExpire: verificationExpire,
     createdAt: new Date().toISOString()
   };
 
@@ -115,6 +118,7 @@ const registerInMemoryUser = async (name, email, password) => {
     name: user.name,
     email: user.email,
     avatar: user.avatar,
+    isVerified: user.isVerified,
     token: generateToken(user._id)
   };
 
@@ -134,6 +138,12 @@ const loginInMemoryUser = async (email, password) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     throw new Error('Invalid email or password');
+  }
+
+  if (user.isVerified === false) {
+    const error = new Error('Please verify your email address before logging in.');
+    error.isUnverified = true;
+    throw error;
   }
 
   return {

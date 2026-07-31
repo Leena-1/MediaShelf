@@ -22,6 +22,10 @@ api.interceptors.request.use(
 // --- Auth APIs ---
 export const registerUser = (data) => api.post('/auth/register', data);
 export const loginUser = (data) => api.post('/auth/login', data);
+export const verifyEmail = (token) => api.get(`/auth/verify-email/${token}`);
+export const resendVerification = (email) => api.post('/auth/resend-verification', { email });
+export const forgotPassword = (email) => api.post('/auth/forgot-password', { email });
+export const resetPassword = (token, password) => api.post(`/auth/reset-password/${token}`, { password });
 export const getMe = () => api.get('/auth/me');
 export const getProfile = () => api.get('/auth/profile');
 export const logoutUser = () => api.post('/auth/logout');

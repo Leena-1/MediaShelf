@@ -1,47 +1,66 @@
 const { spawn } = require('child_process');
 const path = require('path');
 
-const isWin = process.platform === 'win32';
-
 console.log('====================================================');
-console.log('\uD83D\uDE80 Starting MediaShelf (Server + Client)...');
+console.log('\uD83D\uDE80 Starting MediaShelf Dev (Server + Client)...');
 console.log('====================================================\n');
 
-// On Windows, use `node` command name via shell so paths with spaces work correctly.
-// shell: true is required on Windows for .cmd executables and paths with spaces.
-const server = spawn('node', [`"${path.join(__dirname, 'server', 'server.js')}"`], {
-  stdio: 'inherit',
-  shell: true,
-  env: { ...process.env }
-});
+let serverProc = null;
+let clientProc = null;
+let exiting = false;
 
-server.on('error', (err) => {
-  console.error('\u274C Server process error:', err.message);
-});
+function startServer() {
+  serverProc = spawn('node', [path.join(__dirname, 'server', 'server.js')], {
+    stdio: 'inherit',
+    shell: false,
+    env: { ...process.env }
+  });
 
-server.on('exit', (code) => {
-  if (code !== 0 && code !== null) {
-    console.error(`\u274C Server exited with code ${code}`);
-  }
-});
+  serverProc.on('error', (err) => {
+    console.error('\u274C Server process error:', err.message);
+  });
 
-// Spawn Frontend Vite Client — shell: true required on Windows for npm
-const client = spawn('npm', ['run', 'dev', '--prefix', 'client'], {
-  stdio: 'inherit',
-  shell: true,
-  env: { ...process.env }
-});
+  serverProc.on('exit', (code) => {
+    if (!exiting) {
+      console.log(`\u26A0\uFE0F  Server exited (code ${code}). Restarting in 2s...`);
+      setTimeout(startServer, 2000);
+    }
+  });
+}
 
-client.on('error', (err) => {
-  console.error('\u274C Client process error:', err.message);
-});
+function startClient() {
+  clientProc = spawn('npm', ['run', 'dev', '--prefix', 'client'], {
+    stdio: 'inherit',
+    shell: true,
+    env: { ...process.env }
+  });
+
+  clientProc.on('error', (err) => {
+    console.error('\u274C Client process error:', err.message);
+  });
+
+  clientProc.on('exit', (code) => {
+    if (!exiting) {
+      // Vite sometimes exits with code 1 on Windows due to shell warnings — restart it
+      console.log(`\u26A0\uFE0F  Client exited (code ${code}). Restarting in 2s...`);
+      setTimeout(startClient, 2000);
+    }
+  });
+}
+
+startServer();
+startClient();
 
 const handleExit = () => {
+  if (exiting) return;
+  exiting = true;
   console.log('\nStopping all dev services...');
-  try { server.kill(); } catch (e) {}
-  try { client.kill(); } catch (e) {}
-  process.exit(0);
+  try { if (serverProc) serverProc.kill(); } catch (e) {}
+  try { if (clientProc) clientProc.kill(); } catch (e) {}
+  setTimeout(() => process.exit(0), 500);
 };
 
 process.on('SIGINT', handleExit);
 process.on('SIGTERM', handleExit);
+// Keep the process alive
+process.stdin.resume();
